@@ -12,3 +12,18 @@ class AmazonspiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     pass
+
+
+class AmazonProductItem(scrapy.Item):
+    asin = scrapy.Field()
+    title = scrapy.Field()
+    categories = scrapy.Field()
+    brief_descriptions = scrapy.Field()
+    product_description = scrapy.Field()
+    product_parameters = scrapy.Field()
+    product_details = scrapy.Field()
+    brand = scrapy.Field()
+    total_review_count = scrapy.Field()
+    rating = scrapy.Field()
+    url = scrapy.Field()
+    url_object_id = scrapy.Field()

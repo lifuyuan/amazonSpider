@@ -6,8 +6,8 @@ from scrapy.spiders import CrawlSpider, Rule
 
 class AmazonSpider(CrawlSpider):
     name = 'amazon'
-    allowed_domains = ['amazon.com']
-    start_urls = ['http://amazon.com/']
+    allowed_domains = ['www.amazon.com']
+    start_urls = ['https://www.amazon.com/']
 
     rules = (
         Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
