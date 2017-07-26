@@ -71,5 +71,6 @@ class AmazonBaiscSpider(scrapy.Spider):
         product_item['url'] = url
         product_item['url_object_id'] = get_md5(url)
 
-        print(product_item)
+        if product_item['title']:
+            yield product_item
 

@@ -1,5 +1,4 @@
 import hashlib
-import re
 
 
 def get_md5(url):
