@@ -4,12 +4,12 @@ from urllib import parse
 import re
 from AmazonSpider.items import AmazonProductItem
 from AmazonSpider.utils.common import get_md5
-
+import logging
 
 class AmazonBaiscSpider(scrapy.Spider):
     name = 'amazon_baisc'
     allowed_domains = ['www.amazon.com']
-    start_urls = ['https://www.amazon.com/b?node=289816&ref=Ckwr_sets']
+    start_urls = ['https://www.amazon.com/gp/site-directory/ref=nav_shopall_btn']
     product_nums = 0
 
     headers = {
@@ -24,7 +24,7 @@ class AmazonBaiscSpider(scrapy.Spider):
         如果提取的url中格式为 /dp/{ASIN} 或者 /gp/product/{ASIN} 就下载之后直接进入解析函数
         ASIN号为amazon产品的唯一代码，由10位数字和字母组成
         """
-        if AmazonBaiscSpider.product_nums < 10:
+        try:
             all_urls = response.css("a::attr(href)").extract()
             all_urls = [parse.urljoin(response.url, url) for url in all_urls]
             # all_urls = filter(lambda x: True if x.startswith("https") else False, all_urls)
@@ -39,6 +39,8 @@ class AmazonBaiscSpider(scrapy.Spider):
                 else:
                     # 非amazon产品页面，直接进一步跟踪
                     yield scrapy.Request(url, headers=self.headers, callback=self.parse)
+        except Exception as e:
+            logging.info(e)
 
     def parse_product(self, response):
         asin = response.meta.get("asin", "")

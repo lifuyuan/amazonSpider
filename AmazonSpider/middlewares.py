@@ -7,6 +7,7 @@
 
 import logging
 from fake_useragent import UserAgent
+from AmazonSpider.tools.crawl_xici_ip import GetIP
 
 
 class RandomUserAgentMiddleware(object):
@@ -26,3 +27,11 @@ class RandomUserAgentMiddleware(object):
             return getattr(self.ua, self.ua_type)
 
         request.headers.setdefault('User-Agent', get_ua())
+
+
+class RandomProxyMiddleware(object):
+
+    def process_request(self, request, spider):
+        get_ip = GetIP().get_random_ip()
+        request.meta['proxy'] = get_ip
+
