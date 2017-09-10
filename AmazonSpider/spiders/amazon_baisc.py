@@ -48,6 +48,8 @@ class AmazonBaiscSpider(scrapy.Spider):
         categories = response.css("#wayfinding-breadcrumbs_feature_div .a-unordered-list .a-list-item a::text").extract()
         categories = [category.strip() for category in categories]
         brief_descriptions = response.css("#feature-bullets .a-unordered-list .a-list-item::text").extract()
+        if not brief_descriptions:
+            brief_descriptions = response.css("#postBodySPF li::text").extract()
         brief_descriptions = [brief_description.strip() for brief_description in brief_descriptions if brief_description.strip()]
         product_description = response.css("#productDescription p::text").extract_first("").strip()
         product_parameters_node = response.css("#productDetails_detailBullets_sections1 tr")
@@ -58,6 +60,8 @@ class AmazonBaiscSpider(scrapy.Spider):
         total_review_count = response.css(".totalReviewCount::text").extract_first("")
         rating = response.css(".arp-rating-out-of-text::text").extract_first("")
         url = response.url
+
+        images = response.css(".a-button-thumbnail .a-button-text img::attr(src)").extract()
 
         product_item = AmazonProductItem()
         product_item['asin'] = asin
@@ -72,7 +76,7 @@ class AmazonBaiscSpider(scrapy.Spider):
         product_item['rating'] = rating
         product_item['url'] = url
         product_item['url_object_id'] = get_md5(url)
-
-        if product_item['title']:
+        product_item['images'] = [{"image_url": url} for url in images]
+        if product_item['title'] and product_item['categories']:
             yield product_item
 

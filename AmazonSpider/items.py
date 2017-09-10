@@ -7,6 +7,7 @@
 
 import scrapy
 import json
+from random import randint
 
 
 class AmazonspiderItem(scrapy.Item):
@@ -28,15 +29,16 @@ class AmazonProductItem(scrapy.Item):
     rating = scrapy.Field()
     url = scrapy.Field()
     url_object_id = scrapy.Field()
+    images = scrapy.Field()
 
     def get_insert_sql(self):
         insert_sql = """
-            insert into amazon_products(asin, title, categories, brief_descriptions, product_description,
-            product_parameters, product_details, brand, total_review_count, rating, url, url_object_id) values (
-            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            insert into az_products(url, name, brand, score, details, images, product_parameters, categories,
+            asin, description, product_sku, comments_count, short_description) values (
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        params = (self["asin"], self["title"], self["categories"], self["brief_descriptions"],
-                  self["product_description"], json.dumps(self["product_parameters"]), self["product_details"],
-                  self["brand"], self["total_review_count"].replace(",", ""), self["rating"], self["url"], self["url_object_id"])
+        params = (self["url"], self["title"], self["brand"], self["rating"],
+                  self["product_details"], self["images"], json.dumps(self["product_parameters"]), self["categories"],
+                  self["asin"], self["product_description"], [], randint(1, 200), self["brief_descriptions"])
 
         return insert_sql, params

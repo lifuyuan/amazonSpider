@@ -1,7 +1,7 @@
 import requests
 from scrapy.selector import Selector
 import psycopg2
-import logging
+import time
 
 conn = psycopg2.connect(database="amazon_spider", user="fuyuan", password="fuyuan", host="127.0.0.1", port="5432")
 cursor = conn.cursor()
@@ -12,11 +12,10 @@ def crawl_ips():
     headers = {
         'User-Agent': "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0"
     }
-    http_proxy = "http://110.73.13.153:8123"
-    proxyDict = {"http": http_proxy}
 
-    for i in range(2000):
-        re = requests.get("http://www.xicidaili.com/nn/{0}".format(i), headers=headers, proxies=proxyDict)
+    for i in range(2267):
+        time.sleep(0.5)
+        re = requests.get("http://www.xicidaili.com/nn/{0}".format(i), headers=headers)
         selector = Selector(text=re.text)
         all_trs = selector.css("#ip_list tr")
         ip_lists = []
@@ -91,5 +90,7 @@ class GetIP(object):
 
 
 if __name__ == "__main__":
-    get_ip = GetIP()
-    get_ip.get_random_ip()
+    while True:
+        get_ip = GetIP()
+        get_ip.get_random_ip()
+
