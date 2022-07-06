@@ -11,7 +11,7 @@ fake-useragent==0.1.7
 hyperlink==17.3.0
 idna==2.5
 incremental==17.5.0
-lxml==3.8.0
+lxml==4.9.1
 parsel==1.2.0
 psycopg2==2.7.3
 pyasn1==0.2.3
